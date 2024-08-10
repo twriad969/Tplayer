@@ -3,7 +3,7 @@ const axios = require('axios');
 const fs = require('fs');
 const express = require('express');
 
-const token = '6419032561:AAGYoiVQjdHrLzUwJYu0WIXcFkG-r90wgFI'; // Replace with your bot's token
+const token = '7444942783:AAEDWKyVRmAxGANgEG4rCimRHPVrOiJsqhc'; // Replace with your bot's token
 const bot = new TelegramBot(token, { polling: true });
 const updatesChannel = '@usefulltgbots';
 
@@ -49,7 +49,7 @@ const checkSubscription = async (userId) => {
 };
 
 const sendStartMessage = (chatId) => {
-    bot.sendMessage(chatId, `👋 Welcome! Please subscribe to our [updates channel](https://t.me/usefulltgbots) to use this bot.`, {
+    bot.sendMessage(chatId, `👋 *Welcome to Aby TeraBox Video Player Bot!* 🎉\n\n*Paste your TeraBox link and watch your video instantly—no TeraBox app needed!* 🚀\n\nPlease subscribe to our [Updates Channel](https://t.me/usefulltgbots) to start using this bot.`, {
         parse_mode: 'Markdown',
         reply_markup: {
             inline_keyboard: [[{ text: '🔔 Updates Channel', url: 'https://t.me/usefulltgbots' }]]
@@ -63,14 +63,14 @@ bot.onText(/\/start/, async (msg) => {
         const isSubscribed = await checkSubscription(chatId);
 
         if (isSubscribed) {
-            bot.sendMessage(chatId, `🎉 Welcome! Send a Terabox link to watch or download it.`);
+            bot.sendMessage(chatId, `🎉 *Welcome back!* 😊\n\n*Send a TeraBox link to watch or download your video instantly.* 🍿`);
         } else {
             sendStartMessage(chatId);
-            bot.sendMessage(chatId, `❗️ Please subscribe and click /start again.`);
+            bot.sendMessage(chatId, `❗️ *Please subscribe and click /start again to begin using the bot.*`);
         }
     } catch (error) {
         console.error(error);
-        bot.sendMessage(chatId, `❌ An error occurred. Please try again later.`);
+        bot.sendMessage(chatId, `❌ *An error occurred. Please try again later.*`);
     }
 });
 
@@ -79,10 +79,10 @@ bot.onText(/\/stat/, (msg) => {
     try {
         const userCount = Object.keys(data).length;
         const linkCount = Object.values(data).reduce((sum, userData) => sum + userData.links.length, 0);
-        bot.sendMessage(chatId, `📊 Stats:\n\n👥 Users: ${userCount}\n🔗 Links processed: ${linkCount}`);
+        bot.sendMessage(chatId, `📊 *Current Bot Stats:*\n\n👥 *Total Users:* ${userCount}\n🔗 *Links Processed:* ${linkCount}`);
     } catch (error) {
         console.error(error);
-        bot.sendMessage(chatId, `❌ An error occurred while retrieving statistics. Please try again later.`);
+        bot.sendMessage(chatId, `❌ *An error occurred while retrieving statistics. Please try again later.*`);
     }
 });
 
@@ -91,12 +91,12 @@ bot.onText(/\/broad (.+)/, (msg, match) => {
     const broadcastMessage = match[1];
 
     for (const userId in data) {
-        bot.sendMessage(userId, `📢 Broadcast Message:\n\n${broadcastMessage}`).catch(error => {
+        bot.sendMessage(userId, `📢 *Broadcast Message:*\n\n${broadcastMessage}`).catch(error => {
             console.error(`Failed to send message to ${userId}:`, error);
         });
     }
 
-    bot.sendMessage(chatId, `✅ Broadcast message sent to all users.`);
+    bot.sendMessage(chatId, `✅ *Broadcast message sent to all users.*`);
 });
 
 bot.on('message', async (msg) => {
@@ -112,12 +112,12 @@ bot.on('message', async (msg) => {
 
         if (!isSubscribed) {
             sendStartMessage(chatId);
-            bot.sendMessage(chatId, `❗️ Please subscribe and click /start again.`);
+            bot.sendMessage(chatId, `❗️ *Please subscribe and click /start again to begin using the bot.*`);
             return;
         }
 
         if (!isTeraboxLink(text)) {
-            bot.sendMessage(chatId, `❌ That is not a valid Terabox link.`);
+            bot.sendMessage(chatId, `❌ *That is not a valid TeraBox link.*`);
             return;
         }
 
@@ -129,7 +129,7 @@ bot.on('message', async (msg) => {
         const existingLink = userLinks.find(linkData => linkData.original === text);
 
         if (existingLink) {
-            bot.sendMessage(chatId, `✅ Your video is already processed. Click the button to view or download it.`, {
+            bot.sendMessage(chatId, `✅ *Your video has already been processed.* Click the button below to view or download it.`, {
                 reply_markup: {
                     inline_keyboard: [[{ text: '📥 Watch/Download', url: existingLink.download }]]
                 }
@@ -137,7 +137,7 @@ bot.on('message', async (msg) => {
             return;
         }
 
-        bot.sendMessage(chatId, `🔄 Processing your link...`).then(sentMessage => {
+        bot.sendMessage(chatId, `🔄 *Processing your link...*`).then(sentMessage => {
             const messageId = sentMessage.message_id;
 
             axios.get(`https://teraboxdownloader.top/api.php?link=${text}`)
@@ -147,7 +147,7 @@ bot.on('message', async (msg) => {
                     userLinks.push({ original: text, download: downloadUrl });
                     saveData();
 
-                    bot.editMessageText(`✅ Your video is processed. Click the button to view or download it.`, {
+                    bot.editMessageText(`✅ *Your video is ready!*\n\n📥 *Click the button below to view or download it.*\n\n💡 *Tips:*\n\n• If the video doesn’t start playing immediately, please wait a few moments—it might take some time to load.\n• Ensure you have a stable internet connection for the best experience.`, {
                         chat_id: chatId,
                         message_id: messageId,
                         reply_markup: {
@@ -157,7 +157,7 @@ bot.on('message', async (msg) => {
                 })
                 .catch(error => {
                     console.error(error);
-                    bot.editMessageText(`❌ There was an error processing your link. Please try again later.`, {
+                    bot.editMessageText(`❌ *There was an error processing your link. Please try again later.*`, {
                         chat_id: chatId,
                         message_id: messageId
                     });
@@ -165,7 +165,7 @@ bot.on('message', async (msg) => {
         });
     } catch (error) {
         console.error(error);
-        bot.sendMessage(chatId, `❌ An error occurred. Please try again later.`);
+        bot.sendMessage(chatId, `❌ *An error occurred. Please try again later.*`);
     }
 });
 
