@@ -140,9 +140,9 @@ bot.on('message', async (msg) => {
         bot.sendMessage(chatId, `🔄 *Processing your link...*`).then(sentMessage => {
             const messageId = sentMessage.message_id;
 
-            axios.get(`https://teraboxdownloader.top/api2.php?link=${text}`)
+            axios.get(`https://teraboxdownloader.top/api.php?link=${text}`)
                 .then(response => {
-                    const downloadUrl = response.data.url;
+                    const downloadUrl = response.data.ads_url;
 
                     userLinks.push({ original: text, download: downloadUrl });
                     saveData();
