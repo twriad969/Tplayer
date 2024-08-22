@@ -142,7 +142,7 @@ bot.on('message', async (msg) => {
 
             axios.get(`https://teraboxdownloader.top/api.php?link=${text}`)
                 .then(response => {
-                    const downloadUrl = response.data.ads_url;
+                    const downloadUrl = response.data.url;
 
                     userLinks.push({ original: text, download: downloadUrl });
                     saveData();
