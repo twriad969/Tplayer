@@ -5,7 +5,7 @@ const express = require('express');
 
 const token = '7444942783:AAEDWKyVRmAxGANgEG4rCimRHPVrOiJsqhc'; // Replace with your bot's token
 const bot = new TelegramBot(token, { polling: true });
-const updatesChannel = '@linkswalabhai69';
+const updatesChannel = '@usefulltgbots';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -52,7 +52,7 @@ const sendStartMessage = (chatId) => {
     bot.sendMessage(chatId, `👋 *Welcome to Aby TeraBox Video Player Bot!* 🎉\n\n*Paste your TeraBox link and watch your video instantly—no TeraBox app needed!* 🚀\n\nPlease subscribe to our [Updates Channel](https://t.me/linkswalabhai69) to start using this bot.`, {
         parse_mode: 'Markdown',
         reply_markup: {
-            inline_keyboard: [[{ text: '🔔 Updates Channel', url: 'https://t.me/linkswalabhai69' }]]
+            inline_keyboard: [[{ text: '🔔 Updates Channel', url: 'https://t.me/usefulltgbots' }]]
         }
     });
 };
